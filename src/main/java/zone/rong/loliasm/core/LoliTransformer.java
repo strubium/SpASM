@@ -6,6 +6,7 @@ import com.google.common.collect.MultimapBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.*;
@@ -14,6 +15,7 @@ import zone.rong.loliasm.api.LoliStringPool;
 import zone.rong.loliasm.config.LoliConfig;
 import zone.rong.loliasm.LoliLogger;
 import zone.rong.loliasm.patches.*;
+import zone.rong.loliasm.patches.devenv.ModMetadataPatch;
 
 import java.util.*;
 import java.util.function.Function;
@@ -97,6 +99,13 @@ public class LoliTransformer implements IClassTransformer {
                 addTransformation("net.minecraft.client.renderer.chunk.RenderChunk", this::disappearingEntitiesRenderChunkFix);
             }
         }
+        addTransformation("net.minecraft.entity.Entity", EntityFallPatch::patchFallDistance);
+        addTransformation("net.minecraft.client.audio.SoundRegistry", SoundRegistryPatch::patchSoundRegistry);
+
+
+        if (FMLLaunchHandler.isDeobfuscatedEnvironment() == true){
+            addTransformation("net.minecraftforge.fml.common.FMLModContainer", ModMetadataPatch::patchBindMetadata);
+        }
         if (LoliConfig.instance.resourceLocationCanonicalization) {
             addTransformation("net.minecraft.util.ResourceLocation", this::canonicalizeResourceLocationStrings);
         }
@@ -144,10 +153,12 @@ public class LoliTransformer implements IClassTransformer {
             addTransformation("net.minecraft.client.renderer.EntityRenderer", this::fixMC31681);
         }
         addTransformation("net.minecraft.nbt.NBTTagCompound", bytes -> nbtTagCompound$replaceDefaultHashMap(bytes, LoliConfig.instance.optimizeNBTTagCompoundBackingMap, LoliConfig.instance.optimizeNBTTagCompoundMapThreshold, LoliConfig.instance.nbtBackingMapStringCanonicalization));
+        addTransformation("net.minecraft.server.MinecraftServer", MinecraftServerThreadPatch::patchMinecraftServer);
+
     }
 
     public void addTransformation(String key, Function<byte[], byte[]> value) {
-        LoliLogger.instance.info("Adding class {} to the transformation queue", key);
+        LoliLogger.instance.debug("Adding class {} to the transformation queue", key);
         transformations.put(key, value);
     }
 

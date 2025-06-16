@@ -7,9 +7,6 @@
   "mixins": [
     "RegistrySimpleMixin"
   ],
-  "client": [
-    "SoundRegistryMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

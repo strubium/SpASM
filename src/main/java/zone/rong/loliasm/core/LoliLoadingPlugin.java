@@ -156,7 +156,6 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         return isClient ? Arrays.asList(
-                "mixins.devenv.json",
                 "mixins.internal.json",
                 "mixins.vanities.json",
                 "mixins.registries.json",
@@ -181,7 +180,6 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 "mixins.fix_mc_skindownloading.json",
                 "mixins.fix_mc186052.json") :
                 Arrays.asList(
-                        "mixins.devenv.json",
                         "mixins.vfix_bugfixes.json",
                         "mixins.internal.json",
                         "mixins.vanities.json",
@@ -201,9 +199,6 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (FMLLaunchHandler.isDeobfuscatedEnvironment() && "mixins.devenv.json".equals(mixinConfig)) {
-            return true;
-        }
         if (isClient) {
             switch (mixinConfig) {
                 case "mixins.bucket.json":
