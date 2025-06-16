@@ -99,10 +99,6 @@ public class LoliTransformer implements IClassTransformer {
                 addTransformation("net.minecraft.client.renderer.chunk.RenderChunk", this::disappearingEntitiesRenderChunkFix);
             }
         }
-        addTransformation("net.minecraft.entity.Entity", EntityFallPatch::patchFallDistance);
-        addTransformation("net.minecraft.client.audio.SoundRegistry", SoundRegistryPatch::patchSoundRegistry);
-
-
         if (FMLLaunchHandler.isDeobfuscatedEnvironment() == true){
             addTransformation("net.minecraftforge.fml.common.FMLModContainer", ModMetadataPatch::patchBindMetadata);
         }
@@ -152,13 +148,18 @@ public class LoliTransformer implements IClassTransformer {
         if (LoliConfig.instance.fixMC31681) {
             addTransformation("net.minecraft.client.renderer.EntityRenderer", this::fixMC31681);
         }
+        if(LoliConfig.instance.lockCodeCanonicalization){
+            addTransformation("net.minecraft.world.LockCode", LockCodePatch::patchLockCode);
+        }
+
         addTransformation("net.minecraft.nbt.NBTTagCompound", bytes -> nbtTagCompound$replaceDefaultHashMap(bytes, LoliConfig.instance.optimizeNBTTagCompoundBackingMap, LoliConfig.instance.optimizeNBTTagCompoundMapThreshold, LoliConfig.instance.nbtBackingMapStringCanonicalization));
         addTransformation("net.minecraft.server.MinecraftServer", MinecraftServerThreadPatch::patchMinecraftServer);
-
+        addTransformation("net.minecraft.entity.Entity", EntityFallPatch::patchFallDistance);
+        addTransformation("net.minecraft.client.audio.SoundRegistry", SoundRegistryPatch::patchSoundRegistry);
     }
 
     public void addTransformation(String key, Function<byte[], byte[]> value) {
-        LoliLogger.instance.debug("Adding class {} to the transformation queue", key);
+        LoliLogger.instance.info("Adding class {} to the transformation queue", key);
         transformations.put(key, value);
     }
 

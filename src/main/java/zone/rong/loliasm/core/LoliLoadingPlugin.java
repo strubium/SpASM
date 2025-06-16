@@ -160,11 +160,9 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 "mixins.vanities.json",
                 "mixins.registries.json",
                 "mixins.stripitemstack.json",
-                "mixins.lockcode.json",
                 "mixins.recipes.json",
                 "mixins.misc_fluidregistry.json",
                 "mixins.forgefixes.json",
-                "mixins.capability.json",
                 "mixins.singletonevents.json",
                 "mixins.efficienthashing.json",
                 "mixins.crashes.json",
@@ -185,11 +183,9 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                         "mixins.vanities.json",
                         "mixins.registries.json",
                         "mixins.stripitemstack.json",
-                        "mixins.lockcode.json",
                         "mixins.recipes.json",
                         "mixins.misc_fluidregistry.json",
                         "mixins.forgefixes.json",
-                        "mixins.capability.json",
                         "mixins.singletonevents.json",
                         "mixins.efficienthashing.json",
                         "mixins.priorities.json",
@@ -220,16 +216,12 @@ public class LoliLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 return LoliConfig.instance.optimizeRegistries;
             case "mixins.stripitemstack.json":
                 return LoliConfig.instance.stripNearUselessItemStackFields;
-            case "mixins.lockcode.json":
-                return LoliConfig.instance.lockCodeCanonicalization;
             case "mixins.recipes.json":
                 return LoliConfig.instance.optimizeFurnaceRecipeStore;
             case "mixins.misc_fluidregistry.json":
                 return LoliConfig.instance.quickerEnableUniversalBucketCheck;
             case "mixins.forgefixes.json":
                 return LoliConfig.instance.fixFillBucketEventNullPointerException || LoliConfig.instance.fixTileEntityOnLoadCME;
-            case "mixins.capability.json":
-                return LoliConfig.instance.delayItemStackCapabilityInit;
             case "mixins.singletonevents.json":
                 return LoliConfig.instance.makeEventsSingletons;
             case "mixins.efficienthashing.json":
